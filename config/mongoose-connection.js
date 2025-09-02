@@ -6,6 +6,7 @@ const config = require("config");
 mongoose.connect(`${config.get("MONGODB_URI")}/RBbuys`)
 .then(function(){
     dbgr("connected");
+    console.log("Mongoose connected successfully");
 }).catch(function(err){
     dbgr(err);
 })
