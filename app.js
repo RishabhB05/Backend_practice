@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt")
 const path = require("path");
 require("dotenv").config();
 
+const flash = require("connect-flash"); 
+const expressSession = require("express-session");
 
 
 const ownersRouter = require("./routes/ownersRouter") ; 
@@ -20,6 +22,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine" , "ejs");
 
+app.use(flash()); 
+app.use(expressSession({
+     resave: false, 
+     saveUninitialized:false, 
+     secret: process.env.JWT_KEY, 
+})
+);
 
 
 app.use('/', indexRouter);

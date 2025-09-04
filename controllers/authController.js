@@ -28,10 +28,8 @@ module.exports.registerUser = async function(req, res){
                let token = generateToken(createdUser); 
                res.cookie("token", token); 
 
-                res.status(201).json({
-                message: "User registered successfully",
-                user: { id: createdUser._id, email: createdUser.email }
-             }); 
+               
+               res.status(200).send("U have registered succesfully");
              
             }
           });
@@ -44,6 +42,9 @@ module.exports.registerUser = async function(req, res){
 }
 
 module.exports.loginUser = async function(req , res){
+   if (!req.body) {
+     return res.status(400).send("No data sent");
+   }
    let {email , password} =  req.body;
 
    let user = await userModel.findOne({email: email});
@@ -57,12 +58,21 @@ module.exports.loginUser = async function(req , res){
        if(result){
         //we already created generateToken so 
         //when res is true we generate token
-         generateToken(user);
+         const token = generateToken(user);
          res.cookie("token" , token);
-         res.send("You logged in")
+        //  return res.redirect("/shop");
+  return res.redirect("/shop");
        }
        else{
-        return res.send("email or password in incorrect")
-       }
+      req.flash("error", "Email or password is incorrect");
+       return res.redirect("/");
+      }
    })
+}
+
+
+module.exports.logout = function(req, res, next){
+  //we making cookie empty so that it gets flushed
+  res.cookie("token", "");
+  res.redirect("/")
 }
