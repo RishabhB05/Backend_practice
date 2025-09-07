@@ -6,15 +6,13 @@ const productModel = require("../models/productModel");
 
 router.get('/' , function(req, res){
     let error = req.flash("error");
-    res.render("index", { error: error });
+    res.render("index", { error: error , isLoggedIn:false });
 });
 
 router.get("/shop", isLoggedIn ,async function(req, res){
-    const products = await productModel.find();
+    let products = await productModel.find();
     res.render("shop", { products });
 })
-
-
 
 
 
